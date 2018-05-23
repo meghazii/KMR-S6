@@ -9,6 +9,5 @@ if __name__ == '__main__':
 
     app = QtWidgets.QApplication(sys.argv)
     m = uim.ManagerUI()
-    m.addHome()
-    m.showAll()
+    m.start()
     sys.exit(app.exec_())
