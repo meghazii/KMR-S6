@@ -3,11 +3,11 @@
 
 import sys
 from PyQt5 import QtWidgets
-import UIManager as uim
+import ManagerUI as uim
 
 if __name__ == '__main__':
 
     app = QtWidgets.QApplication(sys.argv)
-    mainWindow = uim.UIManager()
+    mainWindow = uim.ManagerUI()
     mainWindow.main()
     sys.exit(app.exec_())

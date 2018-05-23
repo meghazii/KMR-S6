@@ -8,10 +8,11 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(944, 634)
+        MainWindow.resize(944, 622)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.verticalLayoutWidget = QtWidgets.QWidget(self.centralwidget)
@@ -24,20 +25,20 @@ class Ui_MainWindow(object):
         self.textBrowser.setObjectName("textBrowser")
         self.verticalLayout.addWidget(self.textBrowser)
         self.horizontalLayoutWidget = QtWidgets.QWidget(self.centralwidget)
-        self.horizontalLayoutWidget.setGeometry(QtCore.QRect(430, 500, 511, 80))
+        self.horizontalLayoutWidget.setGeometry(QtCore.QRect(430, 490, 511, 80))
         self.horizontalLayoutWidget.setObjectName("horizontalLayoutWidget")
         self.horizontalLayout = QtWidgets.QHBoxLayout(self.horizontalLayoutWidget)
         self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
         self.horizontalLayout.setObjectName("horizontalLayout")
-        self.pushButton_3 = QtWidgets.QPushButton(self.horizontalLayoutWidget)
-        self.pushButton_3.setObjectName("pushButton_3")
-        self.horizontalLayout.addWidget(self.pushButton_3)
-        self.pushButton_2 = QtWidgets.QPushButton(self.horizontalLayoutWidget)
-        self.pushButton_2.setObjectName("pushButton_2")
-        self.horizontalLayout.addWidget(self.pushButton_2)
-        self.pushButton = QtWidgets.QPushButton(self.horizontalLayoutWidget)
-        self.pushButton.setObjectName("pushButton")
-        self.horizontalLayout.addWidget(self.pushButton)
+        self.previousButton = QtWidgets.QPushButton(self.horizontalLayoutWidget)
+        self.previousButton.setObjectName("previousButton")
+        self.horizontalLayout.addWidget(self.previousButton)
+        self.nextButton = QtWidgets.QPushButton(self.horizontalLayoutWidget)
+        self.nextButton.setObjectName("nextButton")
+        self.horizontalLayout.addWidget(self.nextButton)
+        self.leaveButton = QtWidgets.QPushButton(self.horizontalLayoutWidget)
+        self.leaveButton.setObjectName("leaveButton")
+        self.horizontalLayout.addWidget(self.leaveButton)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 944, 25))
@@ -69,8 +70,8 @@ class Ui_MainWindow(object):
         self.menubar.addAction(self.menuA_Propos.menuAction())
 
         self.retranslateUi(MainWindow)
-        self.pushButton.clicked.connect(MainWindow.close)
-        self.pushButton_2.clicked.connect(self.textBrowser.clear)
+        self.leaveButton.clicked.connect(MainWindow.close)
+        self.nextButton.clicked.connect(MainWindow.doItWhenNextIsPressed)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
@@ -82,9 +83,9 @@ class Ui_MainWindow(object):
 "</style></head><body style=\" font-family:\'Cantarell\'; font-size:11pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:14pt; font-weight:600; font-style:italic;\">Lorem Ipsum about l\'extraction de motif</span></p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>"))
-        self.pushButton_3.setText(_translate("MainWindow", "Précédent"))
-        self.pushButton_2.setText(_translate("MainWindow", "Suivant"))
-        self.pushButton.setText(_translate("MainWindow", "Quitter"))
+        self.previousButton.setText(_translate("MainWindow", "Précédent"))
+        self.nextButton.setText(_translate("MainWindow", "Suivant"))
+        self.leaveButton.setText(_translate("MainWindow", "Quitter"))
         self.menuFichier.setTitle(_translate("MainWindow", "Fichier"))
         self.menuOutils.setTitle(_translate("MainWindow", "Outils"))
         self.menuA_Propos.setTitle(_translate("MainWindow", "A Propos"))
@@ -92,3 +93,6 @@ class Ui_MainWindow(object):
         self.actionQuitter.setText(_translate("MainWindow", "Quitter"))
         self.actionPas_pas.setText(_translate("MainWindow", "Pas à pas"))
 
+    def doItWhenNextIsPressed(self, MainWindow):
+        _translate = QtCore.QCoreApplication.translate
+        self.nextButton.setText(_translate("MainWindow", "Oui"))
