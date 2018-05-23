@@ -8,6 +8,7 @@ import ManagerUI as uim
 if __name__ == '__main__':
 
     app = QtWidgets.QApplication(sys.argv)
-    mainWindow = uim.ManagerUI()
-    mainWindow.main()
+    m = uim.ManagerUI()
+    m.addHome()
+    m.showAll()
     sys.exit(app.exec_())
