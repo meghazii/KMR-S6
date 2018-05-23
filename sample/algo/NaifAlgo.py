@@ -1,18 +1,17 @@
 #/usr/bin/python3
 #-*- coding utf-8 -*-
 
-
 def Overlap (text):
     overlap = []
     overlap.append(-1)
     #print(len(text))
     for i in range(0,len(text)):
         overlap.append(overlap[i] + 1)
-	    #print ('Overlap[%d] = %d.' % (i,overlap[i]))  
+	#print ('Overlap[%d] = %d.' % (i,overlap[i]))  
         while overlap[i + 1] > 0 and text[i] != text[overlap[i + 1] - 1]:
             overlap[i + 1] = overlap[overlap[i + 1] - 1] + 1
     return overlap
-'''
+"""
 def Extraction (text,longMotif):
     longText = len(text)
     result = False
@@ -48,7 +47,7 @@ def Extraction (text,longMotif):
              print (message + ".")
              result = True
     return result
-'''
+"""
 
 
 def completeExtraction (text):
@@ -62,7 +61,7 @@ def completeExtraction (text):
 
 def naiveExtraction(text , longMotif):
     result = False
-    for i in range(0,(len(text) - longMotif) + 1):    #Toutes les lettres pouvant posséder le motif
+    for i in range(0,(len(text) - longMotif) + 1):    #Toutes les lettres pouvant posseder le motif
         #print ("i = %d" % (i, ))
         message = ''
         motif = text[i:i+longMotif]
@@ -80,7 +79,7 @@ def naiveExtraction(text , longMotif):
             print (message + ".")
             result = True
     return result
-        
+
 
 
 
