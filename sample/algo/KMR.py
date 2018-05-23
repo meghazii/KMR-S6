@@ -133,7 +133,7 @@ def kmr(chaine,a,b,res):
         
     
 if __name__ == '__main__':
-    chaine = 'ACTATACTACTACTAGTCG'
+    chaine = 'ROUDOUDOU'
     if(chaine.find('-') != -1):
         print("Problème syntaxique, prière de ne pas mettre de '-' dans la chaine à analyser")
     else:
