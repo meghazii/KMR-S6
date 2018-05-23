@@ -2,6 +2,8 @@
 #-*- coding utf-8 -*-
 
 import time
+import os
+import sys
 
 class AlgoNaif:
 
@@ -52,10 +54,10 @@ class AlgoNaif:
         self.result = result
     
 
-    def completeDetailledExtraction (self, text):    #Extraction du ou des plus grands motifs de la chaine text en version détaillé
+    def completeDetailedExtraction (self, text):    #Extraction du ou des plus grands motifs de la chaine text en version détaillé
         i = len(text) - 1
+        print ("Pour la chaine %s voici le(s) plus long(s) motif(s) trouvé(s)" % (text,))
         while i > 0:
-            #print ("i = %d" % (i, ))
             if (self.naiveDetailedExtraction(text,i)):
                 return i
             i -= 1
@@ -63,6 +65,7 @@ class AlgoNaif:
 
     def completeExtraction (self, text):    #Extraction du ou des plus grands motifs de la chaine text
         i = len(text) - 1
+        print ("Pour la chaine %s voici le(s) plus long(s) motif(s) trouvé(s)" % (text,))
         while i > 0:
             #print ("i = %d" % (i, ))
             if (self.naiveExtraction(text,i)):
@@ -98,47 +101,79 @@ class AlgoNaif:
         for i in range(0,(len(text) - longMotif) + 1):    #Toutes les lettres pouvant posseder le motif
 
             self.setFirstIte(i)     #Passe en attribut le premier iterateur
-
-            motif = text[self.getFirstIte():self.getFirstIte()+longMotif]   #Creation du motif
-            self.setMotif(motif)        #Passe en attribut le motif
+            motif = self.createMotif(longMotif)
             message = ''
+           
             for j in range(self.getFirstIte()+1,(len(text) - longMotif) + 1):        #Comparaison avec les lettres se trouvant apres i
-
                 self.setSecIte(j)         #Passe en attribut le deuxieme iterateur
-                ok = True
-                self.setCondi(ok)         #Condition passe en attribut
-                l = 0
-                self.setThirdIte(l)       #Passe en attribut le 3eme iterateur
-
-                while self.getCondi() == True and self.getThirdIte() < longMotif:   #Tant que les 2 chaines sont pareils et qu'on respecte la longueur du motif
-                    ok = (motif[self.getThirdIte()] == text[self.getSecIte() + self.getThirdIte()])   #Si les 2 chaines ont le meme caractere a leur position L                    
-                    self.setCondi(ok)
-                    l += 1
-                    self.setThirdIte(l)
-                if (self.getCondi()):      #Si on a trouve un motif
-                    message = "Le motif: %s apparait aux positions %d " % (self.getMotif(),self.getFirstIte() + 1)
-                    message += ", %d " % (self.getSecIte() + 1, )
-            if(message):
-                print (message + ".")
-                self.setResult(True)
-        return self.getResult()
-                    
+                self.prepareMotif(longMotif)
                 
+                self.checkMotif(longMotif,motif)
+            
+                message = self.motifFound(message)
+            self.editMess(message)
+        return self.getResult()
 
+    def createMotif(self, longMotif):    #Renvoie un motif: changement sur motif
+        text = self.getChaine()
+        motif = text[self.getFirstIte():self.getFirstIte()+longMotif]   #Creation du motif
+        self.setMotif(motif)        #Passe en attribut le motif
+        return self.getMotif()
 
+    def prepareMotif(self,longM):   #Prepare les motifs a etre comparer: changements sur condi et thirdIte
+        longMotif = longM
+        ok = True
+        self.setCondi(ok)         #Condition passe en attribut
+        l = 0
+        self.setThirdIte(l)       #Passe en attribut le 3eme iterateur
 
+    def checkMotif(self,longMotif,motifAAnalyser):      #compare les 2 motifs: changements:condi et l 
+        l = self.getThirdIte()
+        longM = longMotif
+        motif = motifAAnalyser
+        while self.getCondi() == True and self.getThirdIte() < longM:   #Tant que les 2 chaines sont pareils et qu'on respecte la longueur du motif
+            text = self.getChaine()
+            ok = (motif[self.getThirdIte()] == text[self.getSecIte() + self.getThirdIte()])   #Si les 2 chaines ont le meme caractere a leur position L                    
+            self.setCondi(ok)
+            l += 1
+            self.setThirdIte(l)
+                           
+                
+    def editMess(self,mess):    #Modifie le message a renvoyer s'il n'est pas vide: changement result
+        if (mess):
+            print(mess + ".")
+            self.setResult(True)
+
+    def motifFound(self,message):   #message prend positions du motif trouvé: modifie message et le renvoie
+        mess = message 
+        if(self.getCondi()):
+            mess = "Le motif: %s apparait aux positions %d " % (self.getMotif(),self.getFirstIte() + 1)
+            mess += ", %d " % (self.getSecIte() + 1, )
+        return mess
 
 if __name__ == '__main__':
-    """
+    
     text = AlgoNaif("ROUDOUDOU")
     chaine = text.getChaine()
+    """
     text.naiveExtraction(chaine,5)
     text.naiveDetailedExtraction(chaine,5)
-    text.completeExtraction(chaine)
     """
-    text = AlgoNaif("123123132123")
+    text.completeDetailedExtraction(chaine)
+    
+    text = AlgoNaif("AAABAAABAAABBAAABAAA")
     chaine = text.getChaine()
-    text.naiveExtraction(chaine,2)
-    text.naiveDetailedExtraction(chaine,3)
-    text.completeExtraction(chaine)
-        
+    #text.naiveExtraction(chaine,2)
+    #text.naiveDetailedExtraction(chaine,3)
+    text.completeDetailedExtraction(chaine)
+    
+    #chemin = "C:/Users/Joss/Documents/L3informatique/AlgoDeTexte/test.txt"
+    chemin = ""
+    if(len(sys.argv) > 1):
+        chemin = sys.argv[1]
+    
+    if(len(chemin) >= 5):
+        fichier = open(chemin,'r+')
+        texte = AlgoNaif(fichier.read())
+        chaine2 = texte.getChaine()
+        text.completeDetailedExtraction(chaine2)
