@@ -77,7 +77,7 @@ def countClasses(classes,vector):
             result += 1
     return result
 
-def kmr(chaine,saveChaine,a,b):
+def kmr(chaine,a,b,res):
     e = a+b
     n = numbOfChar(chaine)
     vector = findVector(chaine)
@@ -111,36 +111,34 @@ def kmr(chaine,saveChaine,a,b):
             else:
                 x = a+a
                 y = b+b
-            return(kmr(nextChaine,chaine,x,y))
+            return(kmr(nextChaine,x,y,classes))
     elif(a > 1):
         if(b == 1):
-            if(nbClass >= 1):
+            if(nbClass > 0):
                 return classes
+            elif(nbClass == 0):
+                return res
         elif(b > 1):
             if(nbClass == 0):
                 x = a
                 y = b/2
-                return(kmr(nextChaine,saveChaine,x,int(y)))
-            if(nbClass == 1):
-                x = a
-                y = b/2
-                return(kmr(saveChaine,saveChaine,x,int(y)))
+                return(kmr(nextChaine,x,int(y),res))
             else:
                 x = a+a
                 y = b+b
-                return(kmr(nextChaine,chaine,x,y))
+                return(kmr(nextChaine,x,y,classes))
         
             
 
         
     
 if __name__ == '__main__':
-    chaine = 'ACTCAATGATCGGATA'
+    chaine = 'ACTATACTACTACTAGTCG'
     if(chaine.find('-') != -1):
         print("Problème syntaxique, prière de ne pas mettre de '-' dans la chaine à analyser")
     else:
         try:
-            result = kmr(chaine,chaine,1,1)
+            result = kmr(chaine,1,1,[])
             print(result)
             msg = 'Sous motif maximum trouvé aux positions : '
             for char in result:
