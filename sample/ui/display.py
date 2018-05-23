@@ -45,13 +45,13 @@ class Window(QMainWindow):
         toolbar = self.addToolBar('Exit')
         toolbar.addAction(startAct)
         toolbar.addAction(exitAct)
-        
+        """
         okButton = QPushButton("OK")
         cancelButton = QPushButton("Cancel")
 
         self.addWidget(okButton)
-        
-        self.setLayout(vbox)    
+
+        self.setLayout(vbox)    """
 
         self.resize(1280, 720)
         self.setWindowTitle('Algorithmique de texte - Exctraction de motif')
