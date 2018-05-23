@@ -37,6 +37,7 @@ def remplirP(vector,n):
 
 
 def remplirQ(P,vector,n,b):
+    print('vector = %s' %vector)
     result = []
     for i in range(0,n):
         result.append([])
@@ -59,6 +60,7 @@ def findClasses(Q,vector):
     for i in range(0,len(Q)):
         for j in range(0,len(Q[i])):
             qClasses[i].append(vector[Q[i][j]])
+    print('qClasses = %s' %qClasses)
     
     for i in range(0,len(Q)):
         for j in range(0,len(Q[i])):
@@ -75,7 +77,7 @@ def countClasses(classes,vector):
             result += 1
     return result
 
-def kmr(chaine,a,b):
+def kmr(chaine,saveChaine,a,b):
     e = a+b
     n = numbOfChar(chaine)
     vector = findVector(chaine)
@@ -85,36 +87,66 @@ def kmr(chaine,a,b):
     classes = findClasses(pilesQ,vector)
     nbClass = countClasses(classes,vector)
 
-    print('e = %d' % e)
+    nbCstr = 'e%d' %e + ' = %d' %nbClass
+    print(nbCstr)
     print('a = %d' % a)
     print('b = %d' % b)
+    print('P = %s' %pilesP)
+    print('Q = %s' %pilesQ)
+    print('classes = %s' %classes)
+
     print(' ')
 
-    if(nbClass == 1):
-        return classes
-    else:
-        nextChaine = ''
-
-        for i in range(0,len(chaine)):
-            if(classes.count(i) >= 1):
-                nextChaine += chaine[i]
+    nextChaine = ''
+    for i in range(0,len(chaine)):
+        if(classes.count(i) >= 1):
+            nextChaine += chaine[i]
+        else:
+            nextChaine += '-'
+ 
+    if(a == 1):
+        if(b == 1):
+            if(nbClass == 0):
+                raise Exception('noRep')
             else:
-                nextChaine += '-'
-                
-        if(nbClass == 0):
-            x = a
-            y = b/2
-            return kmr(chaine,x,y)
-        elif(nbClass > 1):
-            x = a+a
-            y = b+b
-            return kmr(nextChaine,x,y)
+                x = a+a
+                y = b+b
+            return(kmr(nextChaine,chaine,x,y))
+    elif(a > 1):
+        if(b == 1):
+            if(nbClass >= 1):
+                return classes
+        elif(b > 1):
+            if(nbClass == 0):
+                x = a
+                y = b/2
+                return(kmr(nextChaine,saveChaine,x,int(y)))
+            if(nbClass == 1):
+                x = a
+                y = b/2
+                return(kmr(saveChaine,saveChaine,x,int(y)))
+            else:
+                x = a+a
+                y = b+b
+                return(kmr(nextChaine,chaine,x,y))
+        
+            
+
         
     
 if __name__ == '__main__':
-    chaine = 'ROUDOUDOU'
-    result = kmr(chaine,1,1)
-    msg = ''
-    for char in result :
-        
+    chaine = 'ACTCAATGATCGGATA'
+    if(chaine.find('-') != -1):
+        print("Problème syntaxique, prière de ne pas mettre de '-' dans la chaine à analyser")
+    else:
+        try:
+            result = kmr(chaine,chaine,1,1)
+            print(result)
+            msg = 'Sous motif maximum trouvé aux positions : '
+            for char in result:
+                msg += '%d, ' %char
+            print(msg)
+        except Exception as error:
+            print("Il n'y a aucun motif qui se répète dans cette séquence")
+    
         
