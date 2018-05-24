@@ -19,30 +19,31 @@ class HomeUI(QtWidgets.QMainWindow):
     def start(self):
         self.statusBar().showMessage('Prêt.')
         start_widget = StartingWidget(self)
-        start_widget.startButton.clicked.connect(self.launch)
+        start_widget.startButton.clicked.connect(self.ended)
         self.central_widget.addWidget(start_widget)
 
     def home(self):
         self.statusBar().showMessage('Prêt.')
         homeWidget = StartingWidget(self)
         self.central_widget.addWidget(homeWidget)
-        homeWidget.startButton.clicked.connect(self.launch)
+        homeWidget.startButton.clicked.connect(self.ended)
         self.central_widget.setCurrentWidget(homeWidget)
 
     def run(self):
-        self.statusBar().showMessage('En attente.')
-        runWidget = WaitingWidget(self)
+        self.statusBar().showMessage('Traitement...')
+        runWidget = RunningWidget(self)
         self.central_widget.addWidget(runWidget)
         self.central_widget.setCurrentWidget(runWidget)
+        print('salut')  # insert algo
+        # self.ended()
 
-    def launch(self):
+    def ended(self):
         self.statusBar().showMessage('Traitement terminé.')
         launchWidget = LaunchedWidget(self)
         self.central_widget.addWidget(launchWidget)
         self.central_widget.setCurrentWidget(launchWidget)
 
     def createAction(self):
-
         self.actionHome = QtWidgets.QAction(QtGui.QIcon('../../data/home.png'),
                                             '&Open', self)
         self.actionHome.setObjectName("actionHome")
@@ -151,22 +152,24 @@ class StartingWidget(QtWidgets.QWidget):
         spacerItem1 = QtWidgets.QSpacerItem(40, 100, QtWidgets.QSizePolicy.
                                             Expanding, QtWidgets.QSizePolicy.
                                             Minimum)
-        # h_layout = QtWidgets.QHBoxLayout()
-        self.naifCheckBox = QtWidgets.QCheckBox()
-        self.naifCheckBox.setText('Algorithme naif')
-        self.kmrCheckBox = QtWidgets.QCheckBox()
-        self.kmrCheckBox.setText('Algorithme KMR')
+        self.command = QtWidgets.QLabel('Inserer le texte à traiter dans le champ suivant : ')
+        self.edit = QtWidgets.QTextEdit()
+        self.saveButton = QtWidgets.QPushButton('Sauvergarder')
+        self.saveButton.setEnabled(False)
         h2_layout = QtWidgets.QHBoxLayout()
-        self.startButton = QtWidgets.QPushButton('Commencer')
+        self.startButton = QtWidgets.QPushButton('Executer les deux algorithmes.')
         self.quitButton = QtWidgets.QPushButton('Quitter')
 
+        self.startButton.setEnabled(False)
+        self.edit.textChanged.connect(self.canSave)
+        self.saveButton.clicked.connect(self.saveTxt)
+
         layout.addWidget(self.introWidget)
-
-        # h_layout.addWidget(self.naifCheckBox)
-        # h_layout.addWidget(self.kmrCheckBox)
-        # layout.addLayout(h_layout)
         layout.addItem(spacerItem1)
-
+        layout.addWidget(self.command)
+        layout.addWidget(self.edit)
+        layout.addWidget(self.saveButton)
+        layout.addItem(spacerItem1)
         h2_layout.addWidget(self.startButton)
         h2_layout.addWidget(self.quitButton)
         layout.addLayout(h2_layout)
@@ -174,81 +177,16 @@ class StartingWidget(QtWidgets.QWidget):
         self.setLayout(layout)
         # you might want to do self.button.click.connect(self.parent().login)
 
+    def saveTxt(self):
+        self.myText = self.edit.toPlainText()
+        if (len(self.myText) > 0):
+            self.startButton.setEnabled(True)
+        else:
+            self.startButton.setEnabled(False)
+        self.saveButton.setEnabled(False)
 
-class WaitingWidget(QtWidgets.QWidget):
-    def __init__(self, parent=None):
-        super(WaitingWidget, self).__init__(parent)
-
-        layout = QtWidgets.QVBoxLayout()
-
-        naifButton = QtWidgets.QPushButton('Executer l\'algorithme naif')
-        kmrButton = QtWidgets.QPushButton('Executer l\'algorithme KMR')
-
-        self.introLabel = QtWidgets.QLabel('Lancement')
-        h_layout = QtWidgets.QHBoxLayout()
-
-        naifButton.clicked.connect(self.naifAlgo)
-        kmrButton.clicked.connect(self.KMRAlgo)
-
-        naifLabel = QtWidgets.QLabel('Algorithme naif')
-        naifTpsLabel = QtWidgets.QLabel('Traitement...')
-        naifCTpsLabel = QtWidgets.QLabel('O(n²2)')
-        naifSpcLabel = QtWidgets.QLabel('Traitement...')
-        naifCSpcLabel = QtWidgets.QLabel('O(1)')
-        naifProgressBar = QtWidgets.QProgressBar()
-        v1_layout = QtWidgets.QVBoxLayout()
-        v1_layout.addWidget(naifLabel)
-        v1_layout.addWidget(naifTpsLabel)
-        v1_layout.addWidget(naifCTpsLabel)
-        v1_layout.addWidget(naifSpcLabel)
-        v1_layout.addWidget(naifCSpcLabel)
-        v1_layout.addWidget(naifButton)
-        v1_layout.addWidget(naifProgressBar)
-
-        noneLabel = QtWidgets.QLabel('----VERSUS----')
-        noneTpsLabel = QtWidgets.QLabel('<- Temps d\'execution ->')
-        noneCTpsLabel = QtWidgets.QLabel('<- Complexité en temps ->')
-        noneSpcLabel = QtWidgets.QLabel('<- Espace utilisé ->')
-        noneCSpcLabel = QtWidgets.QLabel('<- Complexité en espace ->')
-        none2Label = QtWidgets.QLabel('             ')
-        none3Label = QtWidgets.QLabel('             ')
-        v0_layout = QtWidgets.QVBoxLayout()
-        v0_layout.addWidget(noneLabel)
-        v0_layout.addWidget(noneTpsLabel)
-        v0_layout.addWidget(noneCTpsLabel)
-        v0_layout.addWidget(noneSpcLabel)
-        v0_layout.addWidget(noneCSpcLabel)
-        v0_layout.addWidget(none2Label)
-        v0_layout.addWidget(none3Label)
-
-        kmrLabel = QtWidgets.QLabel('Algorithme KMR')
-        kmrTpsLabel = QtWidgets.QLabel('Traitement...')
-        kmrCTpsLabel = QtWidgets.QLabel('O(n²2)')
-        kmrSpcLabel = QtWidgets.QLabel('Traitement...')
-        kmrCSpcLabel = QtWidgets.QLabel('O(1)')
-        kmrProgressBar = QtWidgets.QProgressBar()
-        v2_layout = QtWidgets.QVBoxLayout()
-        v2_layout.addWidget(kmrLabel)
-        v2_layout.addWidget(kmrTpsLabel)
-        v2_layout.addWidget(kmrCTpsLabel)
-        v2_layout.addWidget(kmrSpcLabel)
-        v2_layout.addWidget(kmrCSpcLabel)
-        v2_layout.addWidget(kmrButton)
-        v2_layout.addWidget(kmrProgressBar)
-
-        h_layout.addLayout(v1_layout)
-        h_layout.addLayout(v0_layout)
-        h_layout.addLayout(v2_layout)
-
-        layout.addWidget(self.introLabel)
-        layout.addLayout(h_layout)
-        self.setLayout(layout)
-
-    def naifAlgo(self):
-        print('a')
-
-    def KMRAlgo(self):
-        print('b')
+    def canSave(self):
+        self.saveButton.setEnabled(True)
 
 
 class RunningWidget(QtWidgets.QWidget):
