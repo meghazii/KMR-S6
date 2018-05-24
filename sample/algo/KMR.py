@@ -37,7 +37,6 @@ def remplirP(vector,n):
 
 
 def remplirQ(P,vector,n,b):
-    print('vector = %s' %vector)
     result = []
     for i in range(0,n):
         result.append([])
@@ -49,113 +48,79 @@ def remplirQ(P,vector,n,b):
     return result
 
 
-def findClasses(source,chaine,Q,vector,a,b):
+def findClasses(Q,vector):
+    qClasses = []
     result = []
     dejaVu = []
-    compteur = 0
+
+    for i in range(0,len(Q)):
+        qClasses.append([])
 
     for i in range(0,len(Q)):
         for j in range(0,len(Q[i])):
-                if(source[Q[i][j]:(Q[i][j]+a+b)] not in dejaVu):      
-                    result.append([])
-                    dejaVu.append(source[Q[i][j]:(Q[i][j]+a+b)])
-                    result[compteur].append(Q[i][j])
-                    compteur += 1
-                else:
-                    for k in range(0,len(dejaVu)):
-                        if(dejaVu[k] == source[Q[i][j]:(Q[i][j]+a+b)]):
-                            result[k].append(Q[i][j])
-
+            qClasses[i].append(vector[Q[i][j]])
+    
+    for i in range(0,len(Q)):
+        for j in range(0,len(Q[i])):
+            if(qClasses[i].count(qClasses[i][j]) > 1):
+                result.append(Q[i][j])
     return result
 
-def countClasses(classes):
+def countClasses(classes,vector):
     result = 0
+    dejaVu = []
     for i in range(0,len(classes)):
-        if(len(classes[i]) > 1):
+        if(vector[classes[i]] not in dejaVu):
+            dejaVu.append(vector[classes[i]])
             result += 1
     return result
 
-def reducClasses(classes):
-    result = []
-    for i in range(0,len(classes)):
-        for j in range(0,len(classes[i])):
-            if(len(classes[i]) > 1):
-                result.append(classes[i][j])
-    return result
-
-def kmr(source,chaine,a,b,res):
+def kmr(chaine,a,b):
     e = a+b
     n = numbOfChar(chaine)
     vector = findVector(chaine)
 
     pilesP = remplirP(vector,n)
     pilesQ = remplirQ(pilesP,vector,n,b)
-    classes = findClasses(source,chaine,pilesQ,vector,a,b)
-    nbClass = countClasses(classes)
+    classes = findClasses(pilesQ,vector)
+    nbClass = countClasses(classes,vector)
 
-    nbCstr = 'e%d' %e + ' = %d' %nbClass
-    print(nbCstr)
+    print('e = %d' % e)
     print('a = %d' % a)
     print('b = %d' % b)
-    print('P = %s' %pilesP)
-    print('Q = %s' %pilesQ)
-    print('classes = %s' %classes)
-    print('classes precedentes = %s' %res)
-
-    nextChaine = ''
-    reducClass = reducClasses(classes)
-    print('red class = %s ' %reducClass)
-    for i in range(0,len(chaine)):
-        if(reducClass.count(i) >= 1):
-            nextChaine += chaine[i]
-        else:
-            nextChaine += '-'
- 
+	
+	sousMotif = ''
+	for i in range(classes[0],classes[0]+b):
+		sousMotif += chaine[i]
+	print('Sous motif maximum : %s' %sousMotif)
     print(' ')
 
-    if(a == 1):
-        if(b == 1):
-            if(nbClass == 0):
-                raise Exception('noRep')
-            else:
-                x = a+a
-                y = b+b
-            return(kmr(source,nextChaine,x,y,classes))
-    elif(a > 1):
-        if(b == 1):
-            if(nbClass >= 1):
-                return classes
-            elif(nbClass == 0):
-                return res
-            
-        elif(b > 1):
-            if(nbClass == 0):
-                x = a
-                y = b/2
-                return(kmr(source,chaine,x,int(y),res))
-            elif(nbClass == 1):
-                return classes
-            else:
-                x = a+a
-                y = b+b
-                return(kmr(source,nextChaine,x,y,classes))
-        
-            
+    if(nbClass == 1):
+        return classes
+    else:
+        nextChaine = ''
 
+        for i in range(0,len(chaine)):
+            if(classes.count(i) >= 1):
+                nextChaine += chaine[i]
+            else:
+                nextChaine += '-'
+                
+        if(nbClass == 0):
+            x = a
+            y = b/2
+            return kmr(chaine,x,y)
+        elif(nbClass > 1):
+            x = a+a
+            y = b+b
+            return kmr(nextChaine,x,y)
         
     
 if __name__ == '__main__':
-    chaine = 'ACTGTGCTGACTGTGATCGATCGATTTAGC'
-    if(chaine.find('-') != -1):
-        print("Problème syntaxique, prière de ne pas mettre de '-' dans la chaine à analyser")
-    else:
-        result = kmr(chaine,chaine,1,1,[])
-        res = reducClasses(result)
-        if(not res):
-            res = []
-            for i in range(0,len(result)):
-                res.append(result[i][0])
-        msg = 'Sous motif maximum trouvé aux positions : '
-        for i in range(0,len(res)):
-            msg += '%d, ' %(res[i]+1)
-        print(msg)        
+    chaine = 'ROUDOUDOU'
+    result = kmr(chaine,1,1)
+    msg = 'Sous motif maximum trouvé aux positions : '
+    for char in result:
+        msg += '%d' %char
+        
+        

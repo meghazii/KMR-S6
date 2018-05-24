@@ -9,26 +9,22 @@ class ManagerUI(object):
     def __init__(self):
         super(ManagerUI, self).__init__()
         self.frame = []
-        self.currFrame = 0
+
+    def start(self):
+        self.homeFrame = homeui.HomeUI()
+        self.homeFrame.start()
+        self.frame.append(self.homeFrame)
+        self.showAll()
 
     def addHome(self):
         self.frame.append(homeui.HomeUI())
 
     def addAlgo(self):
-        self.frame.append(AlgoUI())
+        self.frame.append(algoui.AlgoUI())
 
     def showAll(self):
         for i in self.frame:
             i.show()
-
-
-"""class HomeUI(QtWidgets.QMainWindow, homeui.HomeUI):
-    def __init__(self, parent=None):
-        super(HomeUI, self).__init__(parent)
-        self.setupUi(self)
-
-    def main(self):
-        self.show()"""
 
 
 class AlgoUI(QtWidgets.QMainWindow, algoui.Ui_AlgoWindow):
