@@ -103,13 +103,14 @@ def kmr(source,chaine,a,b,res):
     print('classes precedentes = %s' %res)
 
     nextChaine = ''
-    reducClass = reducClasses(classes)
-    print('red class = %s ' %reducClass)
-    for i in range(0,len(chaine)):
-        if(reducClass.count(i) >= 1):
-            nextChaine += chaine[i]
-        else:
-            nextChaine += '-'
+    if(classes):
+        reducClass = reducClasses(classes)
+        print('reduc class = %s ' %reducClass)
+        for i in range(0,len(chaine)):
+            if(reducClass.count(i) >= 1):
+                nextChaine += chaine[i]
+            else:
+                nextChaine += '-'
  
     print(' ')
 
@@ -127,6 +128,7 @@ def kmr(source,chaine,a,b,res):
                 return classes
             elif(nbClass == 0):
                 return res
+
             
         elif(b > 1):
             if(nbClass == 0):
@@ -145,7 +147,7 @@ def kmr(source,chaine,a,b,res):
         
     
 if __name__ == '__main__':
-    chaine = 'ACTGTGCTGACTGTGATCGATCGATTTAGC'
+    chaine = 'AABAABAA'
     if(chaine.find('-') != -1):
         print("Problème syntaxique, prière de ne pas mettre de '-' dans la chaine à analyser")
     else:
