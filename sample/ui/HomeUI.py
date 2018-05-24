@@ -1,4 +1,9 @@
 # -*- coding: utf-8 -*-
+import sys
+
+sys.path.append("../algo/")
+
+from NaifAlgo import NaifAlgo
 
 from PyQt5 import QtCore, QtWidgets, QtGui
 
@@ -12,21 +17,25 @@ class HomeUI(QtWidgets.QMainWindow):
         self.createAction()
         self.createToolbar()
         self.createMenubar()
-
+        self.text = ''
         self.central_widget = QtWidgets.QStackedWidget()
         self.setCentralWidget(self.central_widget)
 
     def start(self):
         self.statusBar().showMessage('Prêt.')
-        start_widget = StartingWidget(self)
-        start_widget.startButton.clicked.connect(self.ended)
-        self.central_widget.addWidget(start_widget)
+        startWidget = StartingWidget(self)
+        startWidget.startButton.clicked.connect(self.run)
+        self.text = startWidget.myText
+        print(startWidget.getText())
+        self.central_widget.addWidget(startWidget)
 
     def home(self):
         self.statusBar().showMessage('Prêt.')
         homeWidget = StartingWidget(self)
         self.central_widget.addWidget(homeWidget)
         homeWidget.startButton.clicked.connect(self.ended)
+        print(homeWidget.getText)
+        self.text = homeWidget.myText
         self.central_widget.setCurrentWidget(homeWidget)
 
     def run(self):
@@ -34,8 +43,10 @@ class HomeUI(QtWidgets.QMainWindow):
         runWidget = RunningWidget(self)
         self.central_widget.addWidget(runWidget)
         self.central_widget.setCurrentWidget(runWidget)
-        print('salut')  # insert algo
-        # self.ended()
+        print(self.text)
+        """algo = AlgoNaif(self.text)
+        algo.completeExtraction(algo.getChaine())
+        self.ended()"""
 
     def ended(self):
         self.statusBar().showMessage('Traitement terminé.')
@@ -160,6 +171,8 @@ class StartingWidget(QtWidgets.QWidget):
         self.startButton = QtWidgets.QPushButton('Executer les deux algorithmes.')
         self.quitButton = QtWidgets.QPushButton('Quitter')
 
+        self.myText = ''
+
         self.startButton.setEnabled(False)
         self.edit.textChanged.connect(self.canSave)
         self.saveButton.clicked.connect(self.saveTxt)
@@ -187,6 +200,10 @@ class StartingWidget(QtWidgets.QWidget):
 
     def canSave(self):
         self.saveButton.setEnabled(True)
+
+    def getText(self):
+        print(self.myText)
+        return self.myText
 
 
 class RunningWidget(QtWidgets.QWidget):

@@ -1,14 +1,9 @@
-#/usr/bin/python3
-#-*- coding utf-8 -*-
-
-import time
-import os
-import sys
-
-class AlgoNaif:
+# !/usr/bin/python3
+# -*- coding utf-8 -*-
 
 
-    def __init__(self,chaine):
+class NaifAlgo:
+    def __init__(self, chaine):
         self.chaine = chaine
 
     def getChaine(self):
@@ -20,41 +15,41 @@ class AlgoNaif:
     def getMotif(self):
         return self.motif
 
-    def setMotif(self,motif):
+    def setMotif(self, motif):
         self.motif = motif
 
     def getFirstIte(self):
         return self.firstIte
 
-    def setFirstIte(self,i):
+    def setFirstIte(self, i):
         self.firstIte = i
 
     def getSecIte(self):
         return self.secIte
 
-    def setSecIte(self,j):
+    def setSecIte(self, j):
         self.secIte = j
 
     def getCondi(self):
         return self.condi
 
-    def setCondi(self,condition):
+    def setCondi(self, condition):
         self.condi = condition
 
     def getThirdIte(self):
         return self.thirdIte
 
-    def setThirdIte(self,l):
+    def setThirdIte(self, l):
         self.thirdIte = l
 
     def getResult(self):
         return self.result
 
-    def setResult(self,result):
+    def setResult(self, result):
         self.result = result
     
 
-    def completeDetailedExtraction (self, text):    #Extraction du ou des plus grands motifs de la chaine text en version détaillé
+    def completeDetailedExtraction (self, text):  # Extraction du ou des plus grands motifs de la chaine text en version détaillé
         i = len(text) - 1
         print ("Pour la chaine %s voici le(s) plus long(s) motif(s) trouvé(s)" % (text,))
         while i > 0:
@@ -63,12 +58,12 @@ class AlgoNaif:
             i -= 1
         return 0        
 
-    def completeExtraction (self, text):    #Extraction du ou des plus grands motifs de la chaine text
+    def completeExtraction (self, text):  # Extraction du ou des plus grands motifs de la chaine text
         i = len(text) - 1
         print ("Pour la chaine %s voici le(s) plus long(s) motif(s) trouvé(s)" % (text,))
         while i > 0:
-            #print ("i = %d" % (i, ))
-            if (self.naiveExtraction(text,i)):
+            # print ("i = %d" % (i, ))
+            if (self.naiveExtraction(text, i)):
                 return i
             i -= 1
         return 0
@@ -151,29 +146,31 @@ class AlgoNaif:
             mess += ", %d " % (self.getSecIte() + 1, )
         return mess
 
+    """
+
 if __name__ == '__main__':
-    
+
     text = AlgoNaif("ROUDOUDOU")
     chaine = text.getChaine()
-    """
+
     text.naiveExtraction(chaine,5)
     text.naiveDetailedExtraction(chaine,5)
-    """
+
     text.completeDetailedExtraction(chaine)
-    
+
     text = AlgoNaif("AAABAAABAAABBAAABAAA")
     chaine = text.getChaine()
-    #text.naiveExtraction(chaine,2)
-    #text.naiveDetailedExtraction(chaine,3)
+    # ext.naiveExtraction(chaine,2)
+    # ext.naiveDetailedExtraction(chaine,3)
     text.completeDetailedExtraction(chaine)
-    
-    #chemin = "C:/Users/Joss/Documents/L3informatique/AlgoDeTexte/test.txt"
+
+    # hemin = "C:/Users/Joss/Documents/L3informatique/AlgoDeTexte/test.txt"
     chemin = ""
     if(len(sys.argv) > 1):
         chemin = sys.argv[1]
-    
+
     if(len(chemin) >= 5):
-        fichier = open(chemin,'r+')
+        fichier = open(chemin, 'r+')
         texte = AlgoNaif(fichier.read())
         chaine2 = texte.getChaine()
-        text.completeDetailedExtraction(chaine2)
+        text.completeDetailedExtraction(chaine2)"""
